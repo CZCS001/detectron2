@@ -562,7 +562,7 @@ def _evaluate_predictions_on_coco(
     print("plot: ",plot)
     
     if plot:
-        from ..utils.confusion_matrix import ConfusionMatrix,xywh2xyxy,process_batch,ap_per_class
+        from .confusion_matrix import ConfusionMatrix,xywh2xyxy,process_batch,ap_per_class
         C_M = ConfusionMatrix(nc=3, conf=0.65,iou_thres=0.5)
         stats = []
         for i in range(len(coco_gt.imgs)):#460张图
