@@ -78,8 +78,7 @@ class ConfusionMatrix:
             labels = (0 < len(names) < 99) and len(names) == self.nc  # apply names to ticklabels
             with warnings.catch_warnings():
                 warnings.simplefilter('ignore')  # suppress empty matrix RuntimeWarning: All-NaN slice encountered
-                sn.heatmap(array, annot=self.nc < 30, annot_kws={
-    "size": 8}, cmap='Blues', fmt='.2f', square=True,
+                sn.heatmap(array, annot=self.nc < 30, annot_kws={"size": 8}, cmap='Blues', fmt='.2f', square=True,
                            xticklabels=names + ['background FP'] if labels else "auto",
                            yticklabels=names + ['background FN'] if labels else "auto").set_facecolor((1, 1, 1))
             fig.axes[0].set_xlabel('True')
@@ -95,8 +94,7 @@ class ConfusionMatrix:
             #plt.close()
             return REC, PRC, 2*REC*PRC/(REC+PRC)
         except Exception as e:
-            print(f'WARNING: ConfusionMatrix plot failure: {
-      e}')
+            print(f'WARNING: ConfusionMatrix plot failure: {e}')
 
 
     def print(self):
@@ -260,9 +258,7 @@ def plot_pr_curve(px, py, ap, save_dir='pr_curve.png', names=()):
 
     if 0 < len(names) < 21:  # display per-class legend if < 21 classes
         for i, y in enumerate(py.T):
-            ax.plot(px, y, linewidth=1, label=f'{
-      names[i]} {
-      ap[i, 0]:.3f}')  # plot(recall, precision)
+            ax.plot(px, y, linewidth=1, label=f'{names[i]} {ap[i, 0]:.3f}')  # plot(recall, precision)
     else:
         ax.plot(px, py, linewidth=1, color='grey')  # plot(recall, precision)
 
@@ -282,15 +278,12 @@ def plot_mc_curve(px, py, save_dir='mc_curve.png', names=(), xlabel='Confidence'
 
     if 0 < len(names) < 21:  # display per-class legend if < 21 classes
         for i, y in enumerate(py):
-            ax.plot(px, y, linewidth=1, label=f'{
-      names[i]}')  # plot(confidence, metric)
+            ax.plot(px, y, linewidth=1, label=f'{names[i]}')  # plot(confidence, metric)
     else:
         ax.plot(px, py.T, linewidth=1, color='grey')  # plot(confidence, metric)
 
     y = py.mean(0)
-    ax.plot(px, y, linewidth=3, color='blue', label=f'all classes {
-      y.max():.2f} at {
-      px[y.argmax()]:.3f}')
+    ax.plot(px, y, linewidth=3, color='blue', label=f'all classes {y.max():.2f} at {px[y.argmax()]:.3f}')
     ax.set_xlabel(xlabel)
     ax.set_ylabel(ylabel)
     ax.set_xlim(0, 1)
@@ -311,3 +304,4 @@ def plot_mc_pr_curve(detections, labels, save_dir, names):
     stats = [np.concatenate(x, 0) for x in zip(*stats)]  # to numpy
     if len(stats) and stats[0].any():
         p, r, ap, f1, ap_class = ap_per_class(*stats, plot=True, save_dir=save_dir, names=names)
+
