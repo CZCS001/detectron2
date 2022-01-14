@@ -541,9 +541,9 @@ def _evaluate_box_proposals(dataset_predictions, coco_api, thresholds=None, area
     }
 
 
-def _evaluate_predictions_on_coco( self,
+def _evaluate_predictions_on_coco(
     coco_gt, coco_results, iou_type, kpt_oks_sigmas=None, use_fast_impl=True,
-        img_ids=None, cfg_file=None):
+    img_ids=None, cfg_file=None):
     """
     Evaluate the coco results using COCOEval API.
     """
@@ -584,7 +584,7 @@ def _evaluate_predictions_on_coco( self,
             stats.append((correct.cpu(), detects[:, 4].cpu(), detects[:, 5].cpu(), tcls))
 
         C_M.print()
-        plot_dir = "/home/server/xcg/SwinT_detectron2/" + cfg_file.OUTPUT_DIR
+        plot_dir = cfg_file.OUTPUT_DIR
         #plot_dir = "bzhan138@cedar.computecanada.ca:/home/bzhan138/detectron2/" + cfg_file.OUTPUT_DIR
         #plot_dir = "bzhan138@cedar.computecanada.ca:/scratch/bzhan138/output"
         print("cfg_file.OUTPUT_DIR: ",cfg_file.OUTPUT_DIR )
