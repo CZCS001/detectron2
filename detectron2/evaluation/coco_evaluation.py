@@ -217,6 +217,7 @@ class COCOEvaluator(DatasetEvaluator):
         """
         self._logger.info("~~~~~~~~~~~~~~~Preparing results for COCO format ...")
         coco_results = list(itertools.chain(*[x["instances"] for x in predictions]))
+        self._logger.info("~~~~~~~~~~~~~~~coco_resultst ...{}".format(coco_results))
         tasks = self._tasks or self._tasks_from_predictions(coco_results)
 
         # unmap the category ids for COCO
