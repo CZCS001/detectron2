@@ -150,7 +150,7 @@ class RotatedCOCOEvaluator(COCOEvaluator):
         Evaluate predictions on the given tasks.
         Fill self._results with the metrics of the tasks.
         """
-        self._logger.info("Preparing results for COCO format ...")
+        self._logger.info("~~~~~~~~~~~rotated~~~Preparing results for COCO format ...")
         coco_results = list(itertools.chain(*[x["instances"] for x in predictions]))
 
         # unmap the category ids for COCO
