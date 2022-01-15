@@ -215,7 +215,7 @@ class COCOEvaluator(DatasetEvaluator):
         """
         Evaluate predictions. Fill self._results with the metrics of the tasks.
         """
-        self._logger.info("Preparing results for COCO format ...")
+        self._logger.info("~~~~~~~~~~~~~~~Preparing results for COCO format ...")
         coco_results = list(itertools.chain(*[x["instances"] for x in predictions]))
         tasks = self._tasks or self._tasks_from_predictions(coco_results)
 
