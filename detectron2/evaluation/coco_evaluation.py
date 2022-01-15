@@ -586,7 +586,7 @@ def _evaluate_predictions_on_coco(
         C_M.print()
         plot_dir = cfg_file.OUTPUT_DIR
         #plot_dir = "bzhan138@cedar.computecanada.ca:/home/bzhan138/detectron2/" + cfg_file.OUTPUT_DIR
-        #plot_dir = "bzhan138@cedar.computecanada.ca:/scratch/bzhan138/output"
+        #plot_dir = cfg_file.OUTPUT_DIR
         print("cfg_file.OUTPUT_DIR: ",cfg_file.OUTPUT_DIR )
         print("plot_dir: ",plot_dir )
         self._logger.info( "cfg_file.OUTPUT_DIR:  {}".format(plot_dir))
