@@ -174,12 +174,12 @@ def inference_on_dataset(
                 log_every_n_seconds(
                     logging.INFO,
                     (
-                        f"Inference done {idx + 1}/{total}. "
-                        f"Dataloading: {data_seconds_per_iter:.4f} s/iter. "
-                        f"Inference: {compute_seconds_per_iter:.4f} s/iter. "
-                        f"Eval: {eval_seconds_per_iter:.4f} s/iter. "
-                        f"Total: {total_seconds_per_iter:.4f} s/iter. "
-                        f"ETA={eta}"
+                        f"~~~~~Inference done {idx + 1}/{total}. "
+                        f"~~~~~Dataloading: {data_seconds_per_iter:.4f} s/iter. "
+                        f"~~~~~Inference: {compute_seconds_per_iter:.4f} s/iter. "
+                        f"~~~~~Eval: {eval_seconds_per_iter:.4f} s/iter. "
+                        f"~~~~~Total: {total_seconds_per_iter:.4f} s/iter. "
+                        f"~~~~~ETA={eta}"
                     ),
                     n=5,
                 )
@@ -190,13 +190,13 @@ def inference_on_dataset(
     total_time_str = str(datetime.timedelta(seconds=total_time))
     # NOTE this format is parsed by grep
     logger.info(
-        "Total inference time: {} ({:.6f} s / iter per device, on {} devices)".format(
+        "~~~~~Total inference time: {} ({:.6f} s / iter per device, on {} devices)".format(
             total_time_str, total_time / (total - num_warmup), num_devices
         )
     )
     total_compute_time_str = str(datetime.timedelta(seconds=int(total_compute_time)))
     logger.info(
-        "Total inference pure compute time: {} ({:.6f} s / iter per device, on {} devices)".format(
+        "~~~~~Total inference pure compute time: {} ({:.6f} s / iter per device, on {} devices)".format(
             total_compute_time_str, total_compute_time / (total - num_warmup), num_devices
         )
     )
