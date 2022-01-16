@@ -240,7 +240,7 @@ class COCOEvaluator(DatasetEvaluator):
             file_path = os.path.join(self._output_dir, "coco_instances_results.json")
             self._logger.info("~~COCOE~~~Saving results to {}".format(file_path))
             self._logger.info("~~COCOE~~~Saving results to {}".format(str(coco_results))
-            self._logger.info("~~COCOE~~~Saving results to {}".format(coco_results)))
+            self._logger.info("~~COCOE~~~Saving results to {}".format(coco_results))
             with PathManager.open(file_path, "w") as f:
                 f.write(json.dumps(coco_results))
                 f.flush()
