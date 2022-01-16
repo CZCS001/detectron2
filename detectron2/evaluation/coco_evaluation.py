@@ -561,6 +561,7 @@ def _evaluate_box_proposals(dataset_predictions, coco_api, thresholds=None, area
 
 
 def _evaluate_predictions_on_coco(
+
     coco_gt,
     coco_results,
     iou_type,
@@ -606,9 +607,22 @@ def _evaluate_predictions_on_coco(
       print(C_M)
       return C_M
       C_M.print()
+      stats = []
+      for i in range(len(coco_gt.imgs)):#460张图
+            bbox_gt = np.array([y['bbox'] for y in coco_gt.imgToAnns[20210700001+i]])
+            class_gt = np.array([[y['category_id']-1] for y in coco_gt.imgToAnns[20210700001+i]])
+            labels = np.hstack((class_gt,bbox_gt))
+
+            bbox_dt = np.array([y['bbox'] for y in coco_dt.imgToAnns[20210700001+i]])
+            conf_dt = np.array([[y['score']] for y in coco_dt.imgToAnns[20210700001+i]])
+            class_dt = np.array([[y['category_id']-1] for y in coco_dt.imgToAnns[20210700001+i]])
+            predictions = np.hstack((np.hstack((bbox_dt,conf_dt)),class_dt))
+
+            C_M.process_batch(predictions, labels)
+            C_M.print()
+
       plot_dir =  self._output_dir
       names = {k: v for k, v in enumerate(["fuwo", "cewo", "zhanli"])}
- 
       C_M.plot(save_dir='./output/confusion_matrix_rec.png',names=["fuwo","cewo","zhanli"], rec_or_pred=0)
 
     coco_eval = (COCOeval_opt if use_fast_impl else COCOeval)(coco_gt, coco_dt, iou_type)
