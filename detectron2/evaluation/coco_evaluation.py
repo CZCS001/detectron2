@@ -212,10 +212,14 @@ class COCOEvaluator(DatasetEvaluator):
         return sorted(tasks)
 
     def _eval_predictions(self, predictions, img_ids=None):
+        file_path_test = os.path.join(self._output_dir,"innovators_eval_predictions.txt")
+        with PathManager.open(file_path_test, "w") as f:
+              f.write("json.dumps(coco_results)")
+              f.flush()
         """
         Evaluate predictions. Fill self._results with the metrics of the tasks.
         """
-        self._logger.info("Preparing results for COCO format ...")
+        self._logger.info("!~!!!!!Preparing results for COCO format ...")
         coco_results = list(itertools.chain(*[x["instances"] for x in predictions]))
         tasks = self._tasks or self._tasks_from_predictions(coco_results)
 
@@ -238,9 +242,7 @@ class COCOEvaluator(DatasetEvaluator):
 
         if self._output_dir:
             file_path = os.path.join(self._output_dir, "coco_instances_results.json")
-            self._logger.info("~~COCOE~~~Saving results to {}".format(file_path))
-            self._logger.info("~~COCOE~~~Saving results to {}".format(str(coco_results))
-            self._logger.info("~~COCOE~~~Saving results to {}".format(coco_results))
+            self._logger.info("Saving results to {}".format(file_path))
             with PathManager.open(file_path, "w") as f:
                 f.write(json.dumps(coco_results))
                 f.flush()
@@ -269,16 +271,6 @@ class COCOEvaluator(DatasetEvaluator):
                 if len(coco_results) > 0
                 else None  # cocoapi does not handle empty results very well
             )
-
-            file_path2 = os.path.join(self._output_dir, "coco_eval.json")
-            self._logger.info("~~COCOE~~~Saving results to {}".format(str(coco_eval)))
-            self._logger.info("~~COCOE~~~Saving results to {}".format(coco_eval))
-            self._logger.info("~~COCOE~~~Saving results to {}".format(file_path2))
-            with PathManager.open(file_path2, "w") as f:
-                f.write(json.dumps(coco_eval))
-                f.flush()
-
-         
 
             res = self._derive_coco_results(
                 coco_eval, task, class_names=self._metadata.get("thing_classes")
@@ -569,6 +561,7 @@ def _evaluate_box_proposals(dataset_predictions, coco_api, thresholds=None, area
 
 
 def _evaluate_predictions_on_coco(
+
     coco_gt,
     coco_results,
     iou_type,
@@ -592,7 +585,33 @@ def _evaluate_predictions_on_coco(
             c.pop("bbox", None)
 
     coco_dt = coco_gt.loadRes(coco_results)
-                              
+  
+    file_path_test = os.path.join("./output/whatever__evaluate_predictions_on_coco.txt")
+    with PathManager.open(file_path_test, "w") as f:
+                f.write("json.dumps(coco_results)")
+                f.flush()
+
+    plot = True
+    print("plot: ",plot)
+
+    if plot:
+      import csv
+      
+      file_path_test = os.path.join("./output/innovators__evaluate_predictions_on_coco.txt")
+      with PathManager.open(file_path_test, "w") as f:
+                f.write("json.dumps(coco_results)")
+                f.flush()
+
+      from .confusion_matrix import ConfusionMatrix,xywh2xyxy,process_batch,ap_per_class
+      C_M = ConfusionMatrix(nc=3, conf=0.65,iou_thres=0.5)
+      print(C_M)
+      return C_M
+      C_M.print()
+      plot_dir =  self._output_dir
+      names = {k: v for k, v in enumerate(["fuwo", "cewo", "zhanli"])}
+      stats = [np.concatenate(x, 0) for x in zip(*stats)]  # to numpy
+      C_M.plot(save_dir=plot_dir+ '/confusion_matrix_rec.png',names=["fuwo","cewo","zhanli"], rec_or_pred=0)
+
     coco_eval = (COCOeval_opt if use_fast_impl else COCOeval)(coco_gt, coco_dt, iou_type)
     # For COCO, the default max_dets_per_image is [1, 10, 100].
     if max_dets_per_image is None:
@@ -632,8 +651,8 @@ def _evaluate_predictions_on_coco(
     coco_eval.evaluate()
     coco_eval.accumulate()
     coco_eval.summarize()
-    return coco_eval
 
+    return coco_eval
 
 
 class COCOevalMaxDets(COCOeval):
