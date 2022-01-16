@@ -274,7 +274,8 @@ class COCOEvaluator(DatasetEvaluator):
                 f.write(json.dumps(coco_eval))
                 f.flush()
 
-
+            self._logger.info("~~COCOE~~~Saving results to {}".format(str(coco_eval)))
+         
 
             res = self._derive_coco_results(
                 coco_eval, task, class_names=self._metadata.get("thing_classes")
