@@ -215,9 +215,8 @@ class COCOEvaluator(DatasetEvaluator):
         """
         Evaluate predictions. Fill self._results with the metrics of the tasks.
         """
-        self._logger.info("~~~~~~~~~~~~~~~Preparing results for COCO format ...")
+        self._logger.info("Preparing results for COCO format ...")
         coco_results = list(itertools.chain(*[x["instances"] for x in predictions]))
-        self._logger.info("~~~~~~~~~~~~~~~coco_resultst ...{}".format(coco_results))
         tasks = self._tasks or self._tasks_from_predictions(coco_results)
 
         # unmap the category ids for COCO
@@ -239,7 +238,7 @@ class COCOEvaluator(DatasetEvaluator):
 
         if self._output_dir:
             file_path = os.path.join(self._output_dir, "coco_instances_results.json")
-            self._logger.info("@@@@@@@@@@@@@@@@@@@@@@@@@@Saving results to {}".format(file_path))
+            self._logger.info("~~COCOE~~~Saving results to {}".format(file_path))
             with PathManager.open(file_path, "w") as f:
                 f.write(json.dumps(coco_results))
                 f.flush()
@@ -249,7 +248,7 @@ class COCOEvaluator(DatasetEvaluator):
             return
 
         self._logger.info(
-            "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@Evaluating predictions with {} COCO API...".format(
+            "Evaluating predictions with {} COCO API...".format(
                 "unofficial" if self._use_fast_impl else "official"
             )
         )
@@ -268,6 +267,14 @@ class COCOEvaluator(DatasetEvaluator):
                 if len(coco_results) > 0
                 else None  # cocoapi does not handle empty results very well
             )
+
+            file_path2 = os.path.join(self._output_dir, "coco_eval.json")
+            self._logger.info("~~COCOE~~~Saving results to {}".format(file_path2))
+            with PathManager.open(file_path2, "w") as f:
+                f.write(json.dumps(coco_eval))
+                f.flush()
+
+
 
             res = self._derive_coco_results(
                 coco_eval, task, class_names=self._metadata.get("thing_classes")
@@ -299,7 +306,7 @@ class COCOEvaluator(DatasetEvaluator):
                 pickle.dump(proposal_data, f)
 
         if not self._do_evaluation:
-            self._logger.info("@@@@@@@@@@@@@Annotations are not available for evaluation.")
+            self._logger.info("Annotations are not available for evaluation.")
             return
 
         self._logger.info("Evaluating bbox proposals ...")
@@ -581,12 +588,8 @@ def _evaluate_predictions_on_coco(
             c.pop("bbox", None)
 
     coco_dt = coco_gt.loadRes(coco_results)
-    file_path = os.path.join(self._output_dir, "coco_dt.json")
-    with PathManager.open(file_path, "w") as f:
-        f.write(json.dumps(coco_dt))
-        f.flush()
-        
-        
+
+
     coco_eval = (COCOeval_opt if use_fast_impl else COCOeval)(coco_gt, coco_dt, iou_type)
     # For COCO, the default max_dets_per_image is [1, 10, 100].
     if max_dets_per_image is None:
@@ -626,8 +629,8 @@ def _evaluate_predictions_on_coco(
     coco_eval.evaluate()
     coco_eval.accumulate()
     coco_eval.summarize()
-
     return coco_eval
+
 
 
 class COCOevalMaxDets(COCOeval):
