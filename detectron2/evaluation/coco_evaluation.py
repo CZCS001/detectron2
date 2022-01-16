@@ -581,6 +581,12 @@ def _evaluate_predictions_on_coco(
             c.pop("bbox", None)
 
     coco_dt = coco_gt.loadRes(coco_results)
+    file_path = os.path.join(self._output_dir, "coco_dt.json")
+    with PathManager.open(file_path, "w") as f:
+        f.write(json.dumps(coco_dt))
+        f.flush()
+        
+        
     coco_eval = (COCOeval_opt if use_fast_impl else COCOeval)(coco_gt, coco_dt, iou_type)
     # For COCO, the default max_dets_per_image is [1, 10, 100].
     if max_dets_per_image is None:
