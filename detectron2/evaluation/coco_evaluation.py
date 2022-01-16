@@ -270,12 +270,12 @@ class COCOEvaluator(DatasetEvaluator):
             )
 
             file_path2 = os.path.join(self._output_dir, "coco_eval.json")
+            self._logger.info("~~COCOE~~~Saving results to {}".format(str(coco_eval)))
             self._logger.info("~~COCOE~~~Saving results to {}".format(file_path2))
             with PathManager.open(file_path2, "w") as f:
                 f.write(json.dumps(coco_eval))
                 f.flush()
 
-            self._logger.info("~~COCOE~~~Saving results to {}".format(str(coco_eval)))
          
 
             res = self._derive_coco_results(
@@ -590,8 +590,7 @@ def _evaluate_predictions_on_coco(
             c.pop("bbox", None)
 
     coco_dt = coco_gt.loadRes(coco_results)
-
-
+                              
     coco_eval = (COCOeval_opt if use_fast_impl else COCOeval)(coco_gt, coco_dt, iou_type)
     # For COCO, the default max_dets_per_image is [1, 10, 100].
     if max_dets_per_image is None:
