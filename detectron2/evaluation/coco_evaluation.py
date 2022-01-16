@@ -561,7 +561,6 @@ def _evaluate_box_proposals(dataset_predictions, coco_api, thresholds=None, area
 
 
 def _evaluate_predictions_on_coco(
-
     coco_gt,
     coco_results,
     iou_type,
@@ -609,8 +608,8 @@ def _evaluate_predictions_on_coco(
       C_M.print()
       plot_dir =  self._output_dir
       names = {k: v for k, v in enumerate(["fuwo", "cewo", "zhanli"])}
-      stats = [np.concatenate(x, 0) for x in zip(*stats)]  # to numpy
-      C_M.plot(save_dir=plot_dir+ '/confusion_matrix_rec.png',names=["fuwo","cewo","zhanli"], rec_or_pred=0)
+ 
+      C_M.plot(save_dir='./output/confusion_matrix_rec.png',names=["fuwo","cewo","zhanli"], rec_or_pred=0)
 
     coco_eval = (COCOeval_opt if use_fast_impl else COCOeval)(coco_gt, coco_dt, iou_type)
     # For COCO, the default max_dets_per_image is [1, 10, 100].
