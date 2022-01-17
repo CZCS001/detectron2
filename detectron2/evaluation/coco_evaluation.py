@@ -592,20 +592,6 @@ def _evaluate_predictions_on_coco(
     with PathManager.open(file_path_test, "w") as f:
                 f.write("json.dumps(coco_results)")
                 f.flush()
-
-    
-    file_path_test = os.path.join("./output/whatever__evaluate_predictions_on_coco.txt")
-    with PathManager.open(file_path_test, "w") as f:
-                f.write("json.dumps(coco_results)")
-                f.flush()
-
-    
-    
-    file_path_test = os.path.join("./output/whatever__evaluate_predictions_on_coco.txt")
-    with PathManager.open(file_path_test, "w") as f:
-                f.write("json.dumps(coco_results)")
-                f.flush()
-
     
     plot = True #(cfg_file != None) and (isinstance(cfg_file,CfgNode))
     print("plot: ",plot)
