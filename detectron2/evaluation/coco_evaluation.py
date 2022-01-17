@@ -624,9 +624,10 @@ def _evaluate_predictions_on_coco(
           conf_dt = np.array([[y['score']] for y in coco_dt.imgToAnns[i]])
           print("conf_dt:",conf_dt)
           class_dt = np.array([[y['category_id']-1] for y in coco_dt.imgToAnns[i]])
+          print("class_dt:",class_dt)
           predictions = np.hstack((np.hstack((bbox_dt,conf_dt)),class_dt))
           print("predictions:",predictions)
-         # C_M.process_batch(predictions, labels)
+          C_M.process_batch(predictions, labels)
           #detects = torch.tensor(xywh2xyxy(predictions))
          # labs = torch.tensor(np.hstack((labels[:, 0][:, None], xywh2xyxy(labels[:, 1:]))))
          # iouv = torch.linspace(0.5, 0.95, 10)  # iou vector for mAP@0.5:0.95
