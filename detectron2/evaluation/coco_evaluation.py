@@ -561,7 +561,6 @@ def _evaluate_box_proposals(dataset_predictions, coco_api, thresholds=None, area
 
 
 def _evaluate_predictions_on_coco(
-
     coco_gt,
     coco_results,
     iou_type,
@@ -587,6 +586,20 @@ def _evaluate_predictions_on_coco(
     coco_dt = coco_gt.loadRes(coco_results)
     print(coco_dt)
     print(coco_gt)
+    print(len(coco_gt.imgs))
+    print(len(coco_dt.imgs))
+    file_path_test = os.path.join("./output/whatever__evaluate_predictions_on_coco.txt")
+    with PathManager.open(file_path_test, "w") as f:
+                f.write("json.dumps(coco_results)")
+                f.flush()
+
+    
+    file_path_test = os.path.join("./output/whatever__evaluate_predictions_on_coco.txt")
+    with PathManager.open(file_path_test, "w") as f:
+                f.write("json.dumps(coco_results)")
+                f.flush()
+
+    
     
     file_path_test = os.path.join("./output/whatever__evaluate_predictions_on_coco.txt")
     with PathManager.open(file_path_test, "w") as f:
@@ -616,7 +629,7 @@ def _evaluate_predictions_on_coco(
           print(bbox_gt)
           print(class_gt)
           print(i)
-
+        
          # bbox_dt = np.array([y['bbox'] for y in coco_dt.imgToAnns[20210700001+i]])
           #conf_dt = np.array([[y['score']] for y in coco_dt.imgToAnns[20210700001+i]])
           #class_dt = np.array([[y['category_id']-1] for y in coco_dt.imgToAnns[20210700001+i]])
