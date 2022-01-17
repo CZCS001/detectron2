@@ -604,11 +604,11 @@ def _evaluate_predictions_on_coco(
                 f.flush()
 
       from .confusion_matrix import ConfusionMatrix,xywh2xyxy,process_batch,ap_per_class
-      C_M = ConfusionMatrix(nc=0, conf=0.65,iou_thres=0.5)
+      C_M = ConfusionMatrix(nc=1, conf=0.65,iou_thres=0.5)
       stats = []
       for i in range(len(coco_gt.imgs)):# images
           bbox_gt = np.array([y['bbox'] for y in coco_gt.imgToAnns[i]])
-          class_gt = np.array([[y['category_id']-1] for y in coco_gt.imgToAnns[i]])
+          class_gt = np.array([[y['category_id']] for y in coco_gt.imgToAnns[i]])
           labels = np.hstack((class_gt,bbox_gt))
           print("coco_gt.imgs",coco_gt.imgs)
           print("coco_gt.imgs",coco_gt.imgs)
@@ -617,13 +617,12 @@ def _evaluate_predictions_on_coco(
           print("bbox_gt",bbox_gt)
           print("class_gt", class_gt)
           print("labels", labels)
-          print(i)
-        
+          print(i)        
           bbox_dt = np.array([y['bbox'] for y in coco_dt.imgToAnns[i]])
           print("bbox_dt:",bbox_dt)
           conf_dt = np.array([[y['score']] for y in coco_dt.imgToAnns[i]])
           print("conf_dt:",conf_dt)
-          class_dt = np.array([[y['category_id']-1] for y in coco_dt.imgToAnns[i]])
+          class_dt = np.array([[y['category_id']] for y in coco_dt.imgToAnns[i]])
           print("class_dt:",class_dt)
           predictions = np.hstack((np.hstack((bbox_dt,conf_dt)),class_dt))
           print("predictions:",predictions)
