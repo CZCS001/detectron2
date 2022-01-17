@@ -616,7 +616,16 @@ def _evaluate_predictions_on_coco(
       with PathManager.open(file_path_test, "w") as f:
                 f.write("json.dumps(coco_results)")
                 f.flush()
-
+                
+      file_path_test = os.path.join("./output/coco_gt.json")
+      with PathManager.open(file_path_test, "w") as f:
+                f.write(json.dumps(coco_gt))
+                f.flush()
+                
+      file_path_test = os.path.join("./output/coco_dt.json")
+      with PathManager.open(file_path_test, "w") as f:
+                f.write(json.dumps(coco_dt))
+                f.flush()
 
       from .confusion_matrix import ConfusionMatrix,xywh2xyxy,process_batch,ap_per_class
       C_M = ConfusionMatrix(nc=3, conf=0.65,iou_thres=0.5)
@@ -625,9 +634,12 @@ def _evaluate_predictions_on_coco(
           bbox_gt = np.array([y['bbox'] for y in coco_gt.imgToAnns[20210700001+i]])
           class_gt = np.array([[y['category_id']-1] for y in coco_gt.imgToAnns[20210700001+i]])
           labels = np.hstack((class_gt,bbox_gt))
-            
-          print(bbox_gt)
-          print(class_gt)
+        
+          print("coco_gt.imgs",coco_gt.imgs)
+          print("coco_gt.imgToAnns",coco_gt.imgToAnns[i])
+          print("bbox_gt",bbox_gt)
+          print("class_gt", class_gt)
+          print("labels", labels)
           print(i)
         
          # bbox_dt = np.array([y['bbox'] for y in coco_dt.imgToAnns[20210700001+i]])
