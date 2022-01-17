@@ -605,14 +605,22 @@ def _evaluate_predictions_on_coco(
       from .confusion_matrix import ConfusionMatrix,xywh2xyxy,process_batch,ap_per_class
       C_M = ConfusionMatrix(nc=3, conf=0.65,iou_thres=0.5)
       stats = []
-      for i in range(len(coco_gt.imgs)):#460张图
+      for i in range(len(coco_gt.imgs)):# images
           bbox_gt = np.array([y['bbox'] for y in coco_gt.imgToAnns[20210700001+i]])
           class_gt = np.array([[y['category_id']-1] for y in coco_gt.imgToAnns[20210700001+i]])
           labels = np.hstack((class_gt,bbox_gt))
-          print(bbox_gt)
-          print(class_gt)
-          print(labels)
-          print(i)
+
+          bbox_dt = np.array([y['bbox'] for y in coco_dt.imgToAnns[20210700001+i]])
+          conf_dt = np.array([[y['score']] for y in coco_dt.imgToAnns[20210700001+i]])
+          class_dt = np.array([[y['category_id']-1] for y in coco_dt.imgToAnns[20210700001+i]])
+          predictions = np.hstack((np.hstack((bbox_dt,conf_dt)),class_dt))
+          C_M.process_batch(predictions, labels)
+          detects = torch.tensor(xywh2xyxy(predictions))
+          labs = torch.tensor(np.hstack((labels[:, 0][:, None], xywh2xyxy(labels[:, 1:]))))
+          iouv = torch.linspace(0.5, 0.95, 10)  # iou vector for mAP@0.5:0.95
+          correct = process_batch(detects, labs, iouv)
+          tcls = labs[:, 0].tolist()  # target class
+          stats.append((correct.cpu(), detects[:, 4].cpu(), detects[:, 5].cpu(), tcls))
 
       C_M.print()
       names = {k: v for k, v in enumerate(["fuwo", "cewo", "zhanli"])}
