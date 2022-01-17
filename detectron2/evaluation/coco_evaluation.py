@@ -617,12 +617,12 @@ def _evaluate_predictions_on_coco(
                 f.write("json.dumps(coco_results)")
                 f.flush()
                 
-      file_path_test = os.path.join("./output/coco_gt.json")
+      file_path_test = os.path.join("./output/coco_gt.txt")
       with PathManager.open(file_path_test, "w") as f:
                 f.write(json.dumps(coco_gt))
                 f.flush()
                 
-      file_path_test = os.path.join("./output/coco_dt.json")
+      file_path_test = os.path.join("./output/coco_dt.txt")
       with PathManager.open(file_path_test, "w") as f:
                 f.write(json.dumps(coco_dt))
                 f.flush()
