@@ -607,8 +607,8 @@ def _evaluate_predictions_on_coco(
       C_M = ConfusionMatrix(nc=3, conf=0.65,iou_thres=0.5)
       stats = []
       for i in range(len(coco_gt.imgs)):# images
-          bbox_gt = np.array([y['bbox'] for y in coco_gt.imgToAnns[20210700001+i]])
-          class_gt = np.array([[y['category_id']-1] for y in coco_gt.imgToAnns[20210700001+i]])
+          bbox_gt = np.array([y['bbox'] for y in coco_gt.imgToAnns[i]])
+          class_gt = np.array([[y['category_id']-1] for y in coco_gt.imgToAnns[i]])
           labels = np.hstack((class_gt,bbox_gt))
         
           print("coco_gt.imgs",coco_gt.imgs)
