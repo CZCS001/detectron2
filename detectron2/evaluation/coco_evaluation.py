@@ -640,7 +640,7 @@ def _evaluate_predictions_on_coco(
      # stats = [np.concatenate(x, 0) for x in zip(*stats)]  # to numpy
      # if len(stats) and stats[0].any():
      #     p, r, ap, f1, ap_class = ap_per_class(*stats, plot=True, save_dir='./output/', names=names)
-     # C_M.plot(save_dir='./output/confusion_matrix_rec.png',names=["fuwo","cewo","zhanli"], rec_or_pred=0)
+      C_M.plot(save_dir='./output/confusion_matrix_rec.png',names=["fuwo","cewo","zhanli"], rec_or_pred=0)
     #  C_M.plot(save_dir='./output/confusion_matrix_pred.png',names=["fuwo", "cewo", "zhanli"], rec_or_pred=1) 
    
 
