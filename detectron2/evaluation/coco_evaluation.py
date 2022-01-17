@@ -623,7 +623,7 @@ def _evaluate_predictions_on_coco(
           print("bbox_dt:",bbox_dt)
           conf_dt = np.array([[y['score']] for y in coco_dt.imgToAnns[i]])
           print("conf_dt:",conf_dt)
-          class_dt = np.array([[y['category_id']-1] for y in coco_dt.imgToAnns[i]])
+          class_dt = np.array([[y['category_id']] for y in coco_dt.imgToAnns[i]])
           print("class_dt:",class_dt)
           predictions = np.hstack((np.hstack((bbox_dt,conf_dt)),class_dt))
           print("predictions:",predictions)
