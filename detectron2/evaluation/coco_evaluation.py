@@ -604,7 +604,7 @@ def _evaluate_predictions_on_coco(
                 f.flush()
 
       from .confusion_matrix import ConfusionMatrix,xywh2xyxy,process_batch,ap_per_class
-      C_M = ConfusionMatrix(nc=3, conf=0.65,iou_thres=0.5)
+      C_M = ConfusionMatrix(nc=1, conf=0.65,iou_thres=0.5)
       stats = []
       for i in range(len(coco_gt.imgs)):# images
           bbox_gt = np.array([y['bbox'] for y in coco_gt.imgToAnns[i]])
@@ -642,8 +642,9 @@ def _evaluate_predictions_on_coco(
      # stats = [np.concatenate(x, 0) for x in zip(*stats)]  # to numpy
      # if len(stats) and stats[0].any():
      #     p, r, ap, f1, ap_class = ap_per_class(*stats, plot=True, save_dir='./output/', names=names)
-      C_M.plot(save_dir='./output/confusion_matrix_rec.png',names=["fuwo","cewo","zhanli"], rec_or_pred=0)
-      C_M.plot(save_dir='./output/confusion_matrix_pred.png',names=["fuwo", "cewo", "zhanli"], rec_or_pred=1) 
+     # C_M.plot(save_dir='./output/confusion_matrix_rec.png',names=["fuwo","cewo","zhanli"], rec_or_pred=0)
+      C_M.plot(save_dir='./output/confusion_matrix_rec.png',names=["ballon"], rec_or_pred=0)
+     #C_M.plot(save_dir='./output/confusion_matrix_pred.png',names=["fuwo", "cewo", "zhanli"], rec_or_pred=1) 
    
 
     coco_eval = (COCOeval_opt if use_fast_impl else COCOeval)(coco_gt, coco_dt, iou_type)
