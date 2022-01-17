@@ -590,10 +590,9 @@ def _evaluate_predictions_on_coco(
     with PathManager.open(file_path_test, "w") as f:
                 f.write("json.dumps(coco_results)")
                 f.flush()
-
-    plot = True
+    
+    plot = True #(cfg_file != None) and (isinstance(cfg_file,CfgNode))
     print("plot: ",plot)
-
     if plot:
       import csv
       
@@ -602,32 +601,35 @@ def _evaluate_predictions_on_coco(
                 f.write("json.dumps(coco_results)")
                 f.flush()
 
+
       from .confusion_matrix import ConfusionMatrix,xywh2xyxy,process_batch,ap_per_class
       C_M = ConfusionMatrix(nc=3, conf=0.65,iou_thres=0.5)
-  
       stats = []
       for i in range(len(coco_gt.imgs)):#460张图
-            bbox_gt = np.array([y['bbox'] for y in coco_gt.imgToAnns[20210700001+i]])
-            class_gt = np.array([[y['category_id']-1] for y in coco_gt.imgToAnns[20210700001+i]])
-            labels = np.hstack((class_gt,bbox_gt))
+          bbox_gt = np.array([y['bbox'] for y in coco_gt.imgToAnns[20210700001+i]])
+          class_gt = np.array([[y['category_id']-1] for y in coco_gt.imgToAnns[20210700001+i]])
+          labels = np.hstack((class_gt,bbox_gt))
 
-            bbox_dt = np.array([y['bbox'] for y in coco_dt.imgToAnns[20210700001+i]])
-            conf_dt = np.array([[y['score']] for y in coco_dt.imgToAnns[20210700001+i]])
-            class_dt = np.array([[y['category_id']-1] for y in coco_dt.imgToAnns[20210700001+i]])
-            predictions = np.hstack((np.hstack((bbox_dt,conf_dt)),class_dt))
-            detects = torch.tensor(xywh2xyxy(predictions))
-            labs = torch.tensor(np.hstack((labels[:, 0][:, None], xywh2xyxy(labels[:, 1:]))))
-            iouv = torch.linspace(0.5, 0.95, 10)  # iou vector for mAP@0.5:0.95
-            correct = process_batch(detects, labs, iouv)
-            tcls = labs[:, 0].tolist()  # target class
-            stats.append((correct.cpu(), detects[:, 4].cpu(), detects[:, 5].cpu(), tcls))
+          bbox_dt = np.array([y['bbox'] for y in coco_dt.imgToAnns[20210700001+i]])
+          conf_dt = np.array([[y['score']] for y in coco_dt.imgToAnns[20210700001+i]])
+          class_dt = np.array([[y['category_id']-1] for y in coco_dt.imgToAnns[20210700001+i]])
+          predictions = np.hstack((np.hstack((bbox_dt,conf_dt)),class_dt))
+          C_M.process_batch(predictions, labels)
+          detects = torch.tensor(xywh2xyxy(predictions))
+          labs = torch.tensor(np.hstack((labels[:, 0][:, None], xywh2xyxy(labels[:, 1:]))))
+          iouv = torch.linspace(0.5, 0.95, 10)  # iou vector for mAP@0.5:0.95
+          correct = process_batch(detects, labs, iouv)
+          tcls = labs[:, 0].tolist()  # target class
+          stats.append((correct.cpu(), detects[:, 4].cpu(), detects[:, 5].cpu(), tcls))
 
-            C_M.process_batch(predictions, labels)
-            C_M.print()
-
-      plot_dir =  self._output_dir
+      C_M.print()
       names = {k: v for k, v in enumerate(["fuwo", "cewo", "zhanli"])}
+      stats = [np.concatenate(x, 0) for x in zip(*stats)]  # to numpy
+      if len(stats) and stats[0].any():
+          p, r, ap, f1, ap_class = ap_per_class(*stats, plot=True, save_dir='./output/', names=names)
       C_M.plot(save_dir='./output/confusion_matrix_rec.png',names=["fuwo","cewo","zhanli"], rec_or_pred=0)
+      C_M.plot(save_dir='./output/confusion_matrix_pred.png',names=["fuwo", "cewo", "zhanli"], rec_or_pred=1) 
+   
 
     coco_eval = (COCOeval_opt if use_fast_impl else COCOeval)(coco_gt, coco_dt, iou_type)
     # For COCO, the default max_dets_per_image is [1, 10, 100].
