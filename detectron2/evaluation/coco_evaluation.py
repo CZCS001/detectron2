@@ -585,21 +585,14 @@ def _evaluate_predictions_on_coco(
             c.pop("bbox", None)
 
     coco_dt = coco_gt.loadRes(coco_results)
-  
+    print(coco_dt)
+    print(coco_gt)
+    
     file_path_test = os.path.join("./output/whatever__evaluate_predictions_on_coco.txt")
     with PathManager.open(file_path_test, "w") as f:
                 f.write("json.dumps(coco_results)")
                 f.flush()
-    file_path_test = os.path.join("./output/whatever__coco_dt.txt")
-    with PathManager.open(file_path_test, "w") as f:
-                f.write(json.dumps(coco_dt))
-                f.flush()
-    
-    file_path_test = os.path.join("./output/whatever__coco_dt.txt")
-    with PathManager.open(file_path_test, "w") as f:
-                f.write(json.dumps(coco_gt))
-                f.flush()
-    
+
     
     plot = True #(cfg_file != None) and (isinstance(cfg_file,CfgNode))
     print("plot: ",plot)
