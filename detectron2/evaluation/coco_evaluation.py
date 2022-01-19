@@ -604,7 +604,7 @@ def _evaluate_predictions_on_coco(
                 f.flush()
 
       from .confusion_matrix import ConfusionMatrix,xywh2xyxy,process_batch,ap_per_class
-      C_M = ConfusionMatrix(nc=1, conf=0.65,iou_thres=0.5)
+      C_M = ConfusionMatrix(nc=1, conf=0.25,iou_thres=0.45)
       stats = []
       for i in range(len(coco_gt.imgs)):# images
           bbox_gt = np.array([y['bbox'] for y in coco_gt.imgToAnns[i]])
