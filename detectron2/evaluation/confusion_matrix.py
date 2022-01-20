@@ -8,7 +8,7 @@ import torch
 
 class ConfusionMatrix:
     # Updated version of https://github.com/kaanakan/object_detection_confusion_matrix
-    def __init__(self, nc, conf=0.25, iou_thres=0.45):
+    def __init__(self, nc, conf=0.25, iou_thres=0.001):
         self.matrix = np.zeros((nc + 1, nc + 1))
         self.nc = nc  # number of classes
         self.conf = conf
@@ -70,7 +70,7 @@ class ConfusionMatrix:
             import seaborn as sn
 
             array = self.matrix / ((self.matrix.sum(rec_or_pred).reshape(1, -1) + 1E-6) if normalize else 1)  # normalize columns
-            array[array < 0.005] = 0.00 #np.nan  # don't annotate (would appear as 0.00)
+            array[array < 0.0005] = 0.00 #np.nan  # don't annotate (would appear as 0.00)
             array = self.matrix + array
 
             fig = plt.figure(figsize=(12, 9), tight_layout=True)
