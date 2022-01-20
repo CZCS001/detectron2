@@ -608,7 +608,7 @@ def _evaluate_predictions_on_coco(
       stats = []
       for i in range(len(coco_gt.imgs)):# images
           bbox_gt = np.array([y['bbox'] for y in coco_gt.imgToAnns[i]])
-          class_gt = np.array([[y['category_id']] for y in coco_gt.imgToAnns[i]])
+          class_gt = np.array([[y['category_id']-1] for y in coco_gt.imgToAnns[i]])
           labels = np.hstack((class_gt,bbox_gt))
           print("coco_gt.imgs",coco_gt.imgs)
           print("coco_gt.imgs",coco_gt.imgs)
