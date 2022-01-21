@@ -584,10 +584,6 @@ def _evaluate_predictions_on_coco(
             c.pop("bbox", None)
 
     coco_dt = coco_gt.loadRes(coco_results)
-    print(coco_dt)
-    print(coco_gt)
-    print(len(coco_gt.imgs))
-    print(len(coco_dt.imgs))
     file_path_test = os.path.join("./output/whatever__evaluate_predictions_on_coco.txt")
     with PathManager.open(file_path_test, "w") as f:
                 f.write("json.dumps(coco_results)")
@@ -613,9 +609,10 @@ def _evaluate_predictions_on_coco(
           bbox_gt = np.array([y['bbox'] for y in coco_gt.imgToAnns[i]])
           class_gt = np.array([[y['category_id']] for y in coco_gt.imgToAnns[i]]).  #2.coco_gt转化为labels
           labels = np.hstack((class_gt,bbox_gt))
+            
           coco_gt_classes.append(class_gt)
          # print("coco_gt.imgs",coco_gt.imgs)
-         # print("class_gt", class_gt)
+          print("class_gt", class_gt)
          # print("coco_gt.imgToAnns_ALL",coco_gt.imgToAnns)
          # print("coco_gt.imgToAnns",coco_gt.imgToAnns[i])
          # print("bbox_gt",bbox_gt)
@@ -627,7 +624,7 @@ def _evaluate_predictions_on_coco(
          # print("conf_dt:",conf_dt)
           class_dt = np.array([[y['category_id']] for y in coco_dt.imgToAnns[i]])
           coco_gt_classes.append(class_dt)
-         # print("class_dt:",class_dt)
+          print("class_dt:",class_dt)
           predictions = np.hstack((np.hstack((bbox_dt,conf_dt)),class_dt))
          # print("predictions:",predictions)
           C_M.process_batch(predictions, labels)
@@ -638,8 +635,8 @@ def _evaluate_predictions_on_coco(
           correct = process_batch(detects, labs, iouv)
           tcls = labs[:, 0].tolist()  # target class
           stats.append((correct.cpu(), detects[:, 4].cpu(), detects[:, 5].cpu(), tcls))
-      print(coco_dt_classes)
-      print(coco_gt_classes)
+      print("coco_dt_classes",coco_dt_classes)
+      print("coco_gt_classes",coco_gt_classes)
       print(len(coco_dt_classes)==len(coco_gt_classes))
       C_M.print()
       print("stats:",stats)
