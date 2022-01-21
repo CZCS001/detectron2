@@ -640,6 +640,7 @@ def _evaluate_predictions_on_coco(
           stats.append((correct.cpu(), detects[:, 4].cpu(), detects[:, 5].cpu(), tcls))
       print(coco_dt_classes)
       print(coco_gt_classes)
+      print(len(coco_dt_classes)==len(coco_gt_classes))
       C_M.print()
       print("stats:",stats)
       names = {k: v for k, v in enumerate(["ballon"])}
