@@ -70,8 +70,8 @@ class ConfusionMatrix:
             import seaborn as sn
 
             array = self.matrix / ((self.matrix.sum(rec_or_pred).reshape(1, -1) + 1E-6) if normalize else 1)  # normalize columns
-            array[array < 0.0005] = 0.00 #np.nan  # don't annotate (would appear as 0.00)
-            array = self.matrix + array
+            array[array < 0.0005] = np.nan  # don't annotate (would appear as 0.00)
+            #array = self.matrix + array
 
             fig = plt.figure(figsize=(12, 9), tight_layout=True)
             sn.set(font_scale=1.0 if self.nc < 50 else 0.8)  # for label size
